@@ -72,15 +72,16 @@ export default class StemObjectGroup {
         this.experience.scene.add(this.synths_stem_object.mesh)
         this.experience.scene.add(this.vocals_stem_object.mesh)
 
+        /*
         this.bass_stem_object.playSound()
         this.drums_stem_object.playSound()
         this.guitars_stem_object.playSound()
         this.synths_stem_object.playSound()
         this.vocals_stem_object.playSound()
+        */
     }
 
-    update () {
-        console.log('updating meshes')
+    playAllSounds() {
         if (! this.bass_stem_object.isPlaying() ) {
             console.log('trying to start play')
             this.bass_stem_object.playSound()
@@ -89,6 +90,9 @@ export default class StemObjectGroup {
             this.synths_stem_object.playSound()
             this.vocals_stem_object.playSound()
         }
+    }
+
+    update () {
         this.bass_stem_object.update()
         this.drums_stem_object.update()
         this.guitars_stem_object.update()

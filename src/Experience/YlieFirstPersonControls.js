@@ -56,12 +56,15 @@ export default class YlieFirstPersonControls
             } else {
                 this.exitFullScreen()
             }
+        } else if (event.code == 'KeyP') {
+
         }
     }
 
     handleClick = (event) => {
         this.controls.lock()
         this.enterFullscreen()
+        this.experience.world.stemObjectGroup.playAllSounds()
     }
 
     handleKeyDown = (event) => {
