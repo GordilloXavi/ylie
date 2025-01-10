@@ -23,8 +23,8 @@ export default [
         path: 'textures/dirt/normal.jpg'
     },
     {
-        name: 'foxModel',
-        type: 'gltfModel',
-        path: 'models/Fox/glTF/Fox.gltf'
+        name: 'waterNormalTexture',
+        type: 'texture',
+        path: 'textures/water/waternormals.jpg'
     }
 ]
