@@ -81,6 +81,7 @@ export default class StemObjectGroup {
 
     update () {
         if (! this.bass_stem_object.isPlaying() ) {
+            console.log('trying to start play')
             this.bass_stem_object.playSound()
             this.drums_stem_object.playSound()
             this.guitars_stem_object.playSound()
