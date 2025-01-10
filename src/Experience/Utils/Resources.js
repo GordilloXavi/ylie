@@ -23,7 +23,7 @@ export default class Resources extends EventEmitter
         this.loaders = {}
         this.loaders.gltfLoader = new GLTFLoader()
         this.loaders.textureLoader = new THREE.TextureLoader()
-        this.loaders.cubeTextureLoader = new THREE.CubeTextureLoader()
+        this.loaders.audioLoader = new THREE.AudioLoader()
     }
 
     startLoading()
@@ -51,16 +51,16 @@ export default class Resources extends EventEmitter
                     }
                 )
             }
-            else if(source.type === 'cubeTexture')
-            {
-                this.loaders.cubeTextureLoader.load(
-                    source.path,
-                    (file) =>
-                    {
-                        this.sourceLoaded(source, file)
-                    }
-                )
-            }
+            else if(source.type === 'sound')
+                {
+                    this.loaders.audioLoader.load(
+                        source.path,
+                        (file) =>
+                        {
+                            this.sourceLoaded(source, file)
+                        }
+                    )
+                }
         }
     }
 

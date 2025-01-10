@@ -11,6 +11,9 @@ export default class Camera
         this.canvas = this.experience.canvas
 
         this.setInstance()
+
+        this.audioListener = new THREE.AudioListener()
+        this.instance.add(this.audioListener)
     }
 
     setInstance()

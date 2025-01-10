@@ -1,6 +1,6 @@
 import Experience from '../Experience.js'
-import Environment from './Environment.js'
 import WaterFloor from './WaterFloor.js'
+import StemObjectGroup from './StemObjectGroup.js'
 
 export default class World
 {
@@ -15,6 +15,8 @@ export default class World
         {
             // Setup
             this.waterFloor = new WaterFloor()
+            this.stemObjectGroup = new StemObjectGroup()
+
             // TODO: add fog
             // TODO: add lights
 
@@ -25,5 +27,7 @@ export default class World
     {
         if (this.waterFloor)
             this.waterFloor.update()
+        if (this.stemObjectGroup)
+            this.stemObjectGroup.update()
     }
 }

@@ -61,6 +61,7 @@ export default class YlieFirstPersonControls
 
     handleClick = (event) => {
         this.controls.lock()
+        this.enterFullscreen()
     }
 
     handleKeyDown = (event) => {
