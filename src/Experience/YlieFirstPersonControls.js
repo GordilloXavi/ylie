@@ -14,8 +14,8 @@ export default class YlieFirstPersonControls
 
         this.velocity = new THREE.Vector3()
         this.velocityDecay = 0.1
-        this.movementSpeed = 10
-        this.sprintingMovementSpeed = 27
+        this.movementSpeed = 15
+        this.sprintingMovementSpeed = 30
         this.movementCounter = 0
         this.footstepAmplitude = 80
         this.footstepFreq = 1.2

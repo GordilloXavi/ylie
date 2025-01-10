@@ -80,6 +80,7 @@ export default class StemObjectGroup {
     }
 
     update () {
+        console.log('updating meshes')
         if (! this.bass_stem_object.isPlaying() ) {
             console.log('trying to start play')
             this.bass_stem_object.playSound()
