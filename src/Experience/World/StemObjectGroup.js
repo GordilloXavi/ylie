@@ -20,9 +20,13 @@ class StemObject {
 
     }
 
+    isPlaying () {
+        return this.positionalSound.isPlaying
+    }
+
     createMesh () {
         const geometry = new THREE.BoxGeometry(.3, .3, .3)
-        const material = new THREE.MeshBasicMaterial({ color: 0xe0ffe0 })
+        const material = new THREE.MeshBasicMaterial({ color: 0xa0ffa0 })
         const cube = new THREE.Mesh(geometry, material)
 
         return cube
@@ -42,12 +46,12 @@ export default class StemObjectGroup {
     constructor () {
         // TODO: here we will need to pass arguments with the audio paths, the positions and the models
         this.experience = new Experience()
-
-        const bass_stem_position = new THREE.Vector3(5, .7, 0)
-        const drums_stem_position = new THREE.Vector3(1.545, .7, 4.755)
-        const guitars_stem_position = new THREE.Vector3(-4.045, .7, 2.938)
-        const synths_stem_position = new THREE.Vector3(-4.045, .7, -2.938)
-        const vocals_stem_position = new THREE.Vector3(1.545, .7, -4.755)
+        const objectHeight = 0.5
+        const bass_stem_position = new THREE.Vector3(5, objectHeight, 0)
+        const drums_stem_position = new THREE.Vector3(1.545, objectHeight, 4.755)
+        const guitars_stem_position = new THREE.Vector3(-4.045, objectHeight, 2.938)
+        const synths_stem_position = new THREE.Vector3(-4.045, objectHeight, -2.938)
+        const vocals_stem_position = new THREE.Vector3(1.545, objectHeight, -4.755)
 
         this.bass_stem_object = new StemObject(this.experience.resources.items.soul_net_bass, bass_stem_position)
         this.drums_stem_object = new StemObject(this.experience.resources.items.soul_net_drums, drums_stem_position)
@@ -66,10 +70,20 @@ export default class StemObjectGroup {
         this.guitars_stem_object.playSound()
         this.synths_stem_object.playSound()
         this.vocals_stem_object.playSound()
-
     }
 
     update () {
+        if (! this.bass_stem_object.isPlaying() ) {
+            this.bass_stem_object.playSound()
+            this.drums_stem_object.playSound()
+            this.guitars_stem_object.playSound()
+            this.synths_stem_object.playSound()
+            this.vocals_stem_object.playSound()
+        }
         this.bass_stem_object.update()
+        this.drums_stem_object.update()
+        this.guitars_stem_object.update()
+        this.synths_stem_object.update()
+        this.vocals_stem_object.update()
     }
 }

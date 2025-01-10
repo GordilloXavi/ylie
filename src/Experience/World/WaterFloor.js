@@ -29,7 +29,7 @@ export default class WaterFloor
         this.water.rotation.x = - Math.PI / 2
         this.waterUniforms = this.water.material.uniforms
         this.waterUniforms['size'].value = 10
-        this.waterUniforms['distortionScale'].value = 10000000
+        this.waterUniforms['distortionScale'].value = 1
 
 
         this.scene.add(this.water)
