@@ -13,26 +13,29 @@ export default class WaterFloor
         this.normalMap = this.resources.items.waterNormalTexture
         this.normalMap.wrapS = this.normalMap.wrapT = THREE.RepeatWrapping
 
-        this.water = new Water(new THREE.PlaneGeometry(500, 500),
+        this.water = new Water(new THREE.PlaneGeometry(50, 50),
             {
-                textureWidth: 2048,
-                textureHeight: 2048,
+                textureWidth: 1024,
+                textureHeight: 1024,
                 waterNormals: this.normalMap,
                 //sunDirection: new THREE.Vector3(), // this was commented
                 sunColor: 0x111111,
                 waterColor: 0x111111,
-                distortionScale: 3.7,
+                //distortionScale: 1000,
                 fog: true
             }
         )
 
         this.water.rotation.x = - Math.PI / 2
         this.waterUniforms = this.water.material.uniforms
+        this.waterUniforms['size'].value = 10
+        this.waterUniforms['distortionScale'].value = 10000000
+
 
         this.scene.add(this.water)
     }
 
     update() {
-        this.water.material.uniforms[ 'time' ].value += this.experience.time.delta / 1000
+        this.waterUniforms[ 'time' ].value += this.experience.time.delta / 2
     }
 }

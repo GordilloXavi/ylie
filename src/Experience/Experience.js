@@ -7,6 +7,8 @@ import Camera from './Camera.js'
 import Renderer from './Renderer.js'
 import World from './World/World.js'
 import Resources from './Utils/Resources.js'
+import YlieFirstPersonControls from './YlieFirstPersonControls.js'
+
 
 import sources from './sources.js'
 
@@ -36,6 +38,7 @@ export default class Experience
         this.scene = new THREE.Scene()
         this.resources = new Resources(sources)
         this.camera = new Camera()
+        this.controls = new YlieFirstPersonControls()
         this.renderer = new Renderer()
         this.world = new World()
 
@@ -60,7 +63,7 @@ export default class Experience
 
     update()
     {
-        this.camera.update()
+        this.controls.update()
         this.world.update()
         this.renderer.update()
     }
@@ -92,7 +95,6 @@ export default class Experience
             }
         })
 
-        this.camera.controls.dispose()
         this.renderer.instance.dispose()
 
         if(this.debug.active)

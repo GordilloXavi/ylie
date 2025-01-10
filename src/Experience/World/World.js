@@ -15,7 +15,9 @@ export default class World
         {
             // Setup
             this.waterFloor = new WaterFloor()
-            this.environment = new Environment()
+            // TODO: add fog
+            // TODO: add lights
+
         })
     }
 

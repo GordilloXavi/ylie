@@ -10,7 +10,7 @@ export default class Time extends EventEmitter
         this.start = Date.now()
         this.current = this.start
         this.elapsed = 0
-        this.delta = 16
+        this.delta = 16 / 1000
 
         window.requestAnimationFrame(() =>
         {
@@ -21,7 +21,7 @@ export default class Time extends EventEmitter
     tick()
     {
         const currentTime = Date.now()
-        this.delta = currentTime - this.current
+        this.delta = ( currentTime - this.current ) / 1000
         this.current = currentTime
         this.elapsed = this.current - this.start
 
