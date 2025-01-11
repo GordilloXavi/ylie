@@ -27,8 +27,8 @@ export default class World
             this.envMap.mapping = THREE.EquirectangularReflectionMapping
             this.scene.background = this.envMap
             this.scene.environment = this.envMap
-
-            // TODO: add fog
+            this.scene.backgroundIntensity = 0.7
+            this.scene.environmentIntensity = 0.7
         })
     }
 

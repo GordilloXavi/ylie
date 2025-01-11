@@ -13,7 +13,7 @@ export default class WaterFloor
         this.normalMap = this.resources.items.waterNormalTexture
         this.normalMap.wrapS = this.normalMap.wrapT = THREE.RepeatWrapping
 
-        this.water = new Water(new THREE.PlaneGeometry(50, 50),
+        this.water = new Water(new THREE.PlaneGeometry(100, 100),
             {
                 textureWidth: 1024,
                 textureHeight: 1024,
