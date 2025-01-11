@@ -25,8 +25,16 @@ class StemObject {
     }
 
     createMesh (color) {
-        const geometry = new THREE.BoxGeometry(.3, .3, .3)
-        const material = new THREE.MeshBasicMaterial({ color: color })
+        const geometry = new THREE.IcosahedronGeometry(.3)//(.3, .3, .3)
+        const material = new THREE.MeshStandardMaterial({ color: color })
+        //const material = new THREE.MeshPhysicalMaterial()
+        //material.color = new THREE.Color({color: color})
+        //material.metalness = 0.1
+        //material.roughness = 0.03
+        //material.transmission = 0.97
+        //material.ior = 1.8
+        //material.thickness = 0.5
+
         const cube = new THREE.Mesh(geometry, material)
 
         return cube
@@ -83,13 +91,22 @@ export default class StemObjectGroup {
 
     playAllSounds() {
         if (! this.bass_stem_object.isPlaying() ) {
-            console.log('trying to start play')
             this.bass_stem_object.playSound()
             this.drums_stem_object.playSound()
             this.guitars_stem_object.playSound()
             this.synths_stem_object.playSound()
             this.vocals_stem_object.playSound()
         }
+    }
+
+    getAllObjects () {
+        return [
+            this.bass_stem_object.mesh,
+            this.drums_stem_object.mesh,
+            this.guitars_stem_object.mesh,
+            this.synths_stem_object.mesh,
+            this.vocals_stem_object.mesh
+        ]
     }
 
     update () {

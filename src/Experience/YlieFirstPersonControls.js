@@ -18,7 +18,7 @@ export default class YlieFirstPersonControls
         this.sprintingMovementSpeed = 30
         this.movementCounter = 0
         this.footstepAmplitude = 80
-        this.footstepFreq = 1.2
+        this.footstepFreq = 1.5
         this.direction = new THREE.Vector3()
         this.pointerSpeed = 0.6
         this.movingForward = false
@@ -28,7 +28,9 @@ export default class YlieFirstPersonControls
         this.sprinting = false
         this.justBeganSprinting = false
         this.sprintTime = 0
+        this.initialCameraHeight = 1
 
+        this.rayCaster = new THREE.Raycaster()
 
         document.addEventListener( 'keydown', this.handleKeyDown )
         document.addEventListener( 'keyup', this.handleKeyUp )
@@ -65,6 +67,20 @@ export default class YlieFirstPersonControls
         this.controls.lock()
         this.enterFullscreen()
         this.experience.world.stemObjectGroup.playAllSounds()
+
+        // Check if we clicked one of the objects
+        this.rayCaster.setFromCamera(new THREE.Vector2(0, 0), this.camera)
+        const draggableObjects = this.experience.world.stemObjectGroup.getAllObjects()
+        
+        if (draggableObjects) {
+            console.log('drag: ', draggableObjects)
+            console.log('intersections: ', this.rayCaster.intersectObjects(draggableObjects))
+            const intersections = this.rayCaster.intersectObjects(draggableObjects)
+            console.log()
+            if (intersections.length) {
+                console.log('intersecting')
+            }
+        }
     }
 
     handleKeyDown = (event) => {
@@ -153,33 +169,30 @@ export default class YlieFirstPersonControls
         this.controls.moveRight( moveRightAmount )
         this.controls.moveForward( moveForwardAmount )
 
-        /*
+        
         // Footsteps
-        if (moveForward || moveBackward || moveLeft || moveRight) {
-            cameraControlParams.movementCounter += this.experience.time.delta
-            const footstepHeight = Math.sin(-Math.PI/2 + cameraControlParams.movementCounter * (currentMovementSpeed) / cameraControlParams.footstepFreq) / cameraControlParams.footstepAmplitude + 1/cameraControlParams.footstepAmplitude
-            if (footstepHeight * cameraControlParams.footstepAmplitude > 1.5) {
+        /*
+        if (this.movingForward || this.movingBackward || this.movingLeft || this.movingRight) {
+            this.movementCounter += this.experience.time.delta
+            const footstepHeight = Math.sin(-Math.PI/2 + this.movementCounter * (currentMovementSpeed) / this.footstepFreq) / this.footstepAmplitude + 1/this.footstepAmplitude
+            if (footstepHeight * this.footstepAmplitude > 1.5) {
                 let footstepPlaying = false
-                for (let i = 0; i < footsteps.audios.length && !footstepPlaying; i++) footstepPlaying = footsteps.audios[i].isPlaying
+                //for (let i = 0; i < footsteps.audios.length && !footstepPlaying; i++) footstepPlaying = footsteps.audios[i].isPlaying
                 
                 if (!footstepPlaying) {
-                    footsteps.audios[footsteps.currentIndex].play()
-                    footsteps.currentIndex = (footsteps.currentIndex + 1) % footsteps.audios.length
+                    //footsteps.audios[footsteps.currentIndex].play()
+                    //footsteps.currentIndex = (footsteps.currentIndex + 1) % footsteps.audios.length
                 }
             }
-            // breathing sound
-            if (sprinting && sprintTime > 3 && !breathingAudio.isPlaying) {
-                breathingAudio.play()
-            }
-            camera.position.y = cameraControlParams.initialY + footstepHeight
+            this.experience.camera.instance.position.y = this.initialCameraHeight + footstepHeight
         } else {
-            const footstepHeight = Math.sin(-Math.PI/2 + cameraControlParams.movementCounter * (currentMovementSpeed) / cameraControlParams.footstepFreq) / cameraControlParams.footstepAmplitude + 1/cameraControlParams.footstepAmplitude
+            const footstepHeight = Math.sin(-Math.PI/2 + this.movementCounter * (currentMovementSpeed) / this.footstepFreq) / this.footstepAmplitude + 1/this.footstepAmplitude
             if (footstepHeight > 0.0005) {
-                camera.position.y = cameraControlParams.initialY + footstepHeight
-                cameraControlParams.movementCounter += frameElapsedTime
-            } else{
-                cameraControlParams.movementCounter = 0
-                camera.position.y = cameraControlParams.initialY
+                this.experience.camera.instance.position.y = this.initialCameraHeight + footstepHeight
+                this.movementCounter += this.experience.time.delta
+            } else {
+                this.movementCounter = 0
+                this.experience.camera.instance.position.y = this.initialCameraHeight
             }
         }
         */

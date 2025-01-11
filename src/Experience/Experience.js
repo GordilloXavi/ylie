@@ -9,7 +9,6 @@ import World from './World/World.js'
 import Resources from './Utils/Resources.js'
 import YlieFirstPersonControls from './YlieFirstPersonControls.js'
 
-
 import sources from './sources.js'
 
 let instance = null

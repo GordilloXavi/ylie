@@ -23,5 +23,9 @@ export default [
         name: 'soul_net_vocals',
         type: 'sound',
         path: 'sounds/soul_net_stems/vocals.mp3'
+    },{
+        name: 'skyEnvMap',
+        type: 'envMap',
+        path: 'env_maps/sunset.hdr'
     }
 ]

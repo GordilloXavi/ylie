@@ -1,3 +1,4 @@
+import * as THREE from 'three'
 import Experience from '../Experience.js'
 import WaterFloor from './WaterFloor.js'
 import StemObjectGroup from './StemObjectGroup.js'
@@ -17,9 +18,17 @@ export default class World
             this.waterFloor = new WaterFloor()
             this.stemObjectGroup = new StemObjectGroup()
 
-            // TODO: add fog
-            // TODO: add lights
+            //this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+            //this.scene.add(this.ambientLight)
+            //this.directionalLight = new THREE.DirectionalLight(0xffffff, 1)
+            //this.scene.add(this.directionalLight)
 
+            this.envMap = this.resources.items.skyEnvMap
+            this.envMap.mapping = THREE.EquirectangularReflectionMapping
+            this.scene.background = this.envMap
+            this.scene.environment = this.envMap
+
+            // TODO: add fog
         })
     }
 
