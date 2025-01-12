@@ -2,12 +2,14 @@ import * as THREE from 'three'
 import Experience from "../Experience"
 
 class StemObject {
-    constructor (audio_buffer, position, color) { ///, position, color) { // TODO: add position and color
+    constructor (audio_buffer, position, color) {
         this.experience = new Experience()
+        this.camera = this.experience.camera.instance
         this.auaudio_buffer = audio_buffer
 
         this.mesh = this.createMesh(color)
         this.mesh.position.set(position.x, position.y, position.z)
+        this.isBeingGrabbed = false
 
         this.positionalSound = new THREE.PositionalAudio(this.experience.camera.audioListener)
         this.positionalSound.setBuffer( audio_buffer )
@@ -25,15 +27,8 @@ class StemObject {
     }
 
     createMesh (color) {
-        const geometry = new THREE.IcosahedronGeometry(.3)//(.3, .3, .3)
+        const geometry = new THREE.IcosahedronGeometry(.3)
         const material = new THREE.MeshStandardMaterial({ color: color })
-        //const material = new THREE.MeshPhysicalMaterial()
-        //material.color = new THREE.Color({color: color})
-        //material.metalness = 0.1
-        //material.roughness = 0.03
-        //material.transmission = 0.97
-        //material.ior = 1.8
-        //material.thickness = 0.5
 
         const cube = new THREE.Mesh(geometry, material)
 
@@ -44,7 +39,43 @@ class StemObject {
         this.positionalSound.play()
     }
 
+    handleClick (rayCaster, event) {
+        if (!this.isBeingGrabbed) {
+            const intersections = rayCaster.intersectObject(this.mesh)
+
+            if (intersections.length > 0) {
+                if (intersections[0].distance < 4){
+                    this.isBeingGrabbed = true
+                    console.log('intersecting cube')
+                }
+            }
+        } else {
+            this.isBeingGrabbed = false
+        }
+    }
+
+    updatePositionToGrab () {
+        console.log('updating pos')
+        console.log('cam: ', this.camera)
+        const distance = 3.5//this.mesh.position.distanceTo(this.camera.position)
+
+        const cameraDirection = new THREE.Vector3()
+        this.camera.getWorldDirection(cameraDirection)
+
+        // Position the cube in front of the camera
+        const cameraPosition = new THREE.Vector3()
+        this.camera.getWorldPosition(cameraPosition)
+
+        this.mesh.position.copy(
+            cameraPosition.add(cameraDirection.multiplyScalar(distance))
+        )
+        this.mesh.position.y = Math.max(this.mesh.position.y, 0) 
+    }
+
     update () {
+        if (this.isBeingGrabbed) {
+            this.updatePositionToGrab()
+        }
         this.mesh.rotation.x += this.experience.time.delta
         this.mesh.rotation.y += this.experience.time.delta
     }
@@ -52,7 +83,6 @@ class StemObject {
 
 export default class StemObjectGroup {
     constructor () {
-        // TODO: here we will need to pass arguments with the audio paths, the positions and the models
         this.experience = new Experience()
         const objectHeight = 0.5
 
@@ -79,14 +109,6 @@ export default class StemObjectGroup {
         this.experience.scene.add(this.guitars_stem_object.mesh)
         this.experience.scene.add(this.synths_stem_object.mesh)
         this.experience.scene.add(this.vocals_stem_object.mesh)
-
-        /*
-        this.bass_stem_object.playSound()
-        this.drums_stem_object.playSound()
-        this.guitars_stem_object.playSound()
-        this.synths_stem_object.playSound()
-        this.vocals_stem_object.playSound()
-        */
     }
 
     playAllSounds() {
@@ -99,14 +121,23 @@ export default class StemObjectGroup {
         }
     }
 
-    getAllObjects () {
+    getAllInstances() {
         return [
-            this.bass_stem_object.mesh,
-            this.drums_stem_object.mesh,
-            this.guitars_stem_object.mesh,
-            this.synths_stem_object.mesh,
-            this.vocals_stem_object.mesh
+            this.bass_stem_object,
+            this.drums_stem_object,
+            this.guitars_stem_object,
+            this.synths_stem_object,
+            this.vocals_stem_object,
         ]
+    }
+
+    handleIntersections(rayCaster, event) {
+        if (event.type == 'click') {
+            let instances = this.getAllInstances()
+            instances.forEach((instance, index) => {
+                instance.handleClick(rayCaster, event)
+            })
+        }
     }
 
     update () {

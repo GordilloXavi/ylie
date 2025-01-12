@@ -18,11 +18,6 @@ export default class World
             this.waterFloor = new WaterFloor()
             this.stemObjectGroup = new StemObjectGroup()
 
-            //this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
-            //this.scene.add(this.ambientLight)
-            //this.directionalLight = new THREE.DirectionalLight(0xffffff, 1)
-            //this.scene.add(this.directionalLight)
-
             this.envMap = this.resources.items.skyEnvMap
             this.envMap.mapping = THREE.EquirectangularReflectionMapping
             this.scene.background = this.envMap
@@ -30,6 +25,10 @@ export default class World
             this.scene.backgroundIntensity = 0.7
             this.scene.environmentIntensity = 0.7
         })
+    }
+
+    handleIntersections (rayCaster, event) {
+        this.stemObjectGroup.handleIntersections(rayCaster, event)
     }
 
     update()
