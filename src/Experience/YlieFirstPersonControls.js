@@ -68,9 +68,7 @@ export default class YlieFirstPersonControls
         this.enterFullscreen()
         this.experience.world.stemObjectGroup.playAllSounds()
 
-        // Check if we clicked an object in the world
-        this.rayCaster.setFromCamera(new THREE.Vector2(0, 0), this.camera)
-        this.experience.world.handleIntersections(this.rayCaster, event)
+        this.experience.world.handleClick(event)
     }
 
     handleKeyDown = (event) => {

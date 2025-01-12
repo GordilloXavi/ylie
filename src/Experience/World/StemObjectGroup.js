@@ -10,6 +10,7 @@ class StemObject {
         this.mesh = this.createMesh(color)
         this.mesh.position.set(position.x, position.y, position.z)
         this.isBeingGrabbed = false
+        this.intersectionDistance = null
 
         this.positionalSound = new THREE.PositionalAudio(this.experience.camera.audioListener)
         this.positionalSound.setBuffer( audio_buffer )
@@ -28,7 +29,19 @@ class StemObject {
 
     createMesh (color) {
         const geometry = new THREE.IcosahedronGeometry(.3)
-        const material = new THREE.MeshStandardMaterial({ color: color })
+        const material = new THREE.MeshPhysicalMaterial({
+            color: color,
+            metalness: 0,
+            roughness: 0.05,
+            transmission: 1,
+            ior: 1.1,
+            thickness: 0.1,
+            transparent: true,
+            opacity: 1,
+            // FIXME: you cannot see through the objects
+            //blending: THREE.MultiplyBlending
+            }
+        )
 
         const cube = new THREE.Mesh(geometry, material)
 
@@ -39,25 +52,27 @@ class StemObject {
         this.positionalSound.play()
     }
 
-    handleClick (rayCaster, event) {
-        if (!this.isBeingGrabbed) {
-            const intersections = rayCaster.intersectObject(this.mesh)
+    isIntersecting(distance) {
+        if (!this.intersectionDistance) return false
+        return this.intersectionDistance <= distance
+    }
 
-            if (intersections.length > 0) {
-                if (intersections[0].distance < 4){
-                    this.isBeingGrabbed = true
-                    console.log('intersecting cube')
-                }
-            }
+    handleIntersections (rayCaster) {
+        const intersections = rayCaster.intersectObject(this.mesh)
+        if (intersections.length > 0) {
+            this.intersectionDistance = intersections[0].distance 
         } else {
-            this.isBeingGrabbed = false
+            this.intersectionDistance = null
         }
     }
 
+    handleClick (rayCaster, event) {
+        if (!this.isIntersecting(4)) return
+        this.isBeingGrabbed = !this.isBeingGrabbed
+    }
+
     updatePositionToGrab () {
-        console.log('updating pos')
-        console.log('cam: ', this.camera)
-        const distance = 3.5//this.mesh.position.distanceTo(this.camera.position)
+        const distance = 3.5// TODO: this.mesh.position.distanceTo(this.camera.position)
 
         const cameraDirection = new THREE.Vector3()
         this.camera.getWorldDirection(cameraDirection)
@@ -93,7 +108,7 @@ export default class StemObjectGroup {
         const vocals_stem_position = new THREE.Vector3(-2, objectHeight, -11)
 
         const bass_stem_color = 0x00ff00
-        const drums_stem_color = 0xffffff
+        const drums_stem_color = 0x555555
         const guitars_stem_color = 0xff0000
         const synths_stem_color = 0x0000ff
         const vocals_stem_color = 0xffff00
@@ -131,13 +146,18 @@ export default class StemObjectGroup {
         ]
     }
 
-    handleIntersections(rayCaster, event) {
-        if (event.type == 'click') {
-            let instances = this.getAllInstances()
-            instances.forEach((instance, index) => {
-                instance.handleClick(rayCaster, event)
-            })
-        }
+    handleIntersections(rayCaster) {
+        let instances = this.getAllInstances()
+        instances.forEach((instance, index) => {
+            instance.handleIntersections(rayCaster)
+        })
+    }
+
+    handleClick (event) {
+        let instances = this.getAllInstances()
+        instances.forEach((instance, index) => {
+            instance.handleClick(event)
+        })
     }
 
     update () {

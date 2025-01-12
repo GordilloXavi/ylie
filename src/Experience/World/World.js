@@ -8,8 +8,10 @@ export default class World
     constructor()
     {
         this.experience = new Experience()
+        this.camera = this.experience.camera.instance
         this.scene = this.experience.scene
         this.resources = this.experience.resources
+        this.rayCaster = new THREE.Raycaster()
 
         // Wait for resources
         this.resources.on('ready', () =>
@@ -27,12 +29,18 @@ export default class World
         })
     }
 
-    handleIntersections (rayCaster, event) {
-        this.stemObjectGroup.handleIntersections(rayCaster, event)
+    handleIntersections () {
+        if (this.stemObjectGroup) this.stemObjectGroup.handleIntersections(this.rayCaster)
+    }
+
+    handleClick (event) {
+        this.stemObjectGroup.handleClick(event)
     }
 
     update()
     {
+        this.rayCaster.setFromCamera(new THREE.Vector2(0, 0), this.camera)
+        this.handleIntersections()
         if (this.waterFloor)
             this.waterFloor.update()
         if (this.stemObjectGroup)
