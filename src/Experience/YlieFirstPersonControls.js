@@ -14,10 +14,10 @@ export default class YlieFirstPersonControls
 
         this.velocity = new THREE.Vector3()
         this.velocityDecay = 0.1
-        this.movementSpeed = 15
-        this.sprintingMovementSpeed = 30
+        this.movementSpeed = 20
+        this.sprintingMovementSpeed = 35
         this.movementCounter = 0
-        this.footstepAmplitude = 80
+        this.footstepAmplitude = 125
         this.footstepFreq = 1.5
         this.direction = new THREE.Vector3()
         this.pointerSpeed = 0.6
@@ -159,7 +159,6 @@ export default class YlieFirstPersonControls
 
         
         // Footsteps
-        /*
         if (this.movingForward || this.movingBackward || this.movingLeft || this.movingRight) {
             this.movementCounter += this.experience.time.delta
             const footstepHeight = Math.sin(-Math.PI/2 + this.movementCounter * (currentMovementSpeed) / this.footstepFreq) / this.footstepAmplitude + 1/this.footstepAmplitude
@@ -174,7 +173,7 @@ export default class YlieFirstPersonControls
             }
             this.experience.camera.instance.position.y = this.initialCameraHeight + footstepHeight
         } else {
-            const footstepHeight = Math.sin(-Math.PI/2 + this.movementCounter * (currentMovementSpeed) / this.footstepFreq) / this.footstepAmplitude + 1/this.footstepAmplitude
+            const footstepHeight = Math.sin(-Math.PI/2 + this.movementCounter * currentMovementSpeed / this.footstepFreq) / this.footstepAmplitude + 1 / this.footstepAmplitude
             if (footstepHeight > 0.0005) {
                 this.experience.camera.instance.position.y = this.initialCameraHeight + footstepHeight
                 this.movementCounter += this.experience.time.delta
@@ -183,6 +182,6 @@ export default class YlieFirstPersonControls
                 this.experience.camera.instance.position.y = this.initialCameraHeight
             }
         }
-        */
+        
     }
 }
