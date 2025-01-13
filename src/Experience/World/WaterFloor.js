@@ -36,6 +36,7 @@ export default class WaterFloor
     }
 
     update() {
+        this.water.position.y = Math.sin(this.experience.time.elapsed/1000) / 10
         this.waterUniforms[ 'time' ].value += this.experience.time.delta / 2
     }
 }
