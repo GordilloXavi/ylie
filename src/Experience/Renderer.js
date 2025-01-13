@@ -38,12 +38,14 @@ export default class Renderer
         this.instance.setPixelRatio(this.sizes.pixelRatio)
 
         // Add effects:
+
         const renderTarget = new THREE.WebGLRenderTarget(
             window.innerWidth,
             window.innerHeight,
             {
+                type: THREE.HalfFloatType,
                 format: THREE.RGBAFormat,
-                type: THREE.UnsignedByteType
+                encoding: THREE.sRGBEncoding,
             }
         )
         this.effectComposer = new EffectComposer(this.instance, renderTarget)
@@ -58,13 +60,14 @@ export default class Renderer
             0.05, // radius
             0.01 // threshold
         )
+        unrealBloomPass.renderToScreen = true
 
         this.effectComposer.addPass(unrealBloomPass)
         
         const effectFilm = new FilmPass( 0.4, false )
         this.effectComposer.addPass(effectFilm)
 
-        if(this.instance.getPixelRatio() == 1 ) // && !renderer.capabilities.isWebGL2
+        if(this.instance.getPixelRatio() == 1 )
         {
             const smaaPass = new SMAAPass()
             this.effectComposer.addPass(smaaPass)
