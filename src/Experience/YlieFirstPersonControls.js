@@ -71,6 +71,7 @@ export default class YlieFirstPersonControls
         this.experience.world.handleClick(event)
 
         this.experience.socket.emit('update_position', { id: 333, position: 'awesome' })
+        console.log('emit update_position')
     }
 
     handleKeyDown = (event) => {
