@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { io } from "socket.io-client"
 
 import Debug from './Utils/Debug.js'
 import Sizes from './Utils/Sizes.js'
@@ -51,6 +52,14 @@ export default class Experience
         this.time.on('tick', () =>
         {
             this.update()
+        })
+    }
+
+    initSockets() {
+        this.socket = io('https://seal-app-hivs4.ondigitalocean.app:5000')
+
+        this.socket.on('update_position', (data) => {
+            console.log('received data from socket: ',data)
         })
     }
 
