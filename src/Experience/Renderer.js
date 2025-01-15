@@ -38,7 +38,6 @@ export default class Renderer
         this.instance.setPixelRatio(this.sizes.pixelRatio)
 
         // Add effects:
-
         const renderTarget = new THREE.WebGLRenderTarget(
             window.innerWidth,
             window.innerHeight,
