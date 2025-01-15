@@ -61,7 +61,7 @@ export default class Experience
         this.socket = io('https://seal-app-hivs4.ondigitalocean.app:5000')
 
         this.socket.on('update_position', (data) => {
-            console.log('received data from socket: ',data)
+            console.log('received data from socket: ', data)
         })
     }
 
