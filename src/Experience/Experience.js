@@ -58,7 +58,9 @@ export default class Experience
     }
 
     initSockets() {
-        this.socket = io('https://seal-app-hivs4.ondigitalocean.app:5000')
+        this.socket = io('https://seal-app-hivs4.ondigitalocean.app:5000', {
+            transports: ['websocket', 'polling']
+        })
         console.log('init socket')
 
         this.socket.on('update_position', (data) => {
