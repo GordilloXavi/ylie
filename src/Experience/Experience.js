@@ -54,7 +54,7 @@ export default class Experience
             this.update()
         })
 
-        initSockets()
+        this.initSockets()
     }
 
     initSockets() {
