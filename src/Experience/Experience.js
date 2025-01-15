@@ -53,6 +53,8 @@ export default class Experience
         {
             this.update()
         })
+
+        initSockets()
     }
 
     initSockets() {
