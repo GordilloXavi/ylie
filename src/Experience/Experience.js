@@ -59,7 +59,7 @@ export default class Experience
 
     initSockets() {
         this.socket = io('https://seal-app-hivs4.ondigitalocean.app:5000', {
-            transports: ['websocket', 'polling']
+            transports: ['websocket']
         })
         console.log('init socket')
 
