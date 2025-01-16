@@ -58,7 +58,7 @@ export default class Experience
     }
 
     initSockets() {
-        this.socket = io('https://seal-app-hivs4.ondigitalocean.app:5000', {
+        this.socket = io('wss://seal-app-hivs4.ondigitalocean.app:8080', {
             transports: ['websocket']
         })
         console.log('init socket')
