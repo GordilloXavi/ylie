@@ -58,13 +58,22 @@ export default class Experience
     }
 
     initSockets() {
-        this.socket = io('wss://seal-app-hivs4.ondigitalocean.app:8080', {
-            transports: ['websocket']
-        })
+        this.socket = io('https://seal-app-hivs4.ondigitalocean.app')
         console.log('init socket')
 
-        this.socket.on('update_position', (data) => {
-            console.log('received data from socket: ', data)
+        this.socket.on('connect', () => {
+            console.log('connected_to_server')
+
+            this.emit("client_event", { message: "Hello from the client!" })
+        })
+
+        this.socket.on("server_response", (data) => {
+            console.log("Server says:", data.message)
+        })
+
+        // Listen for disconnection
+        this.socket.on("disconnect", () => {
+            console.log("Disconnected from server")
         })
     }
 
