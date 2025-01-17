@@ -16,8 +16,9 @@ export default class SocketMessenger
         })
 
         // Listen for disconnection
-        this.socket.on("disconnect", () => {
-            console.log("Disconnected from server")
+        this.socket.on("player_disconnected", (data) => {
+            // remove disconnected player
+            console.log("player disconnected: ", data)
         })
 
         this.socket.on('server_response', (data) => {
