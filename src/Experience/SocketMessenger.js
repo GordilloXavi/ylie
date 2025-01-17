@@ -36,16 +36,14 @@ export default class SocketMessenger
         })
     }
 
-    sendPlayerPosition(playerId, playerPosition) {
-        const data = {
-
-        }
-        this.socket.emit('player_position_updated', {
-            data
+    sendPlayerPositionUpdated(player) {
+        this.socket.emit('update_player_position', {
+            playerId: player.id,
+            position: player.position
         })
     }
 
     sendObjectPosition(objectId, objectPosition) {
-        // TODO: update the positions of the shapes
+        // TODO: update the positions of the stems shapes
     }
 }
