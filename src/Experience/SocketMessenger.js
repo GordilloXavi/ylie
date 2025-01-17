@@ -1,4 +1,6 @@
 import { io } from "socket.io-client"
+import Experience from './Experience.js'
+
 
 export default class SocketMessenger
 {
