@@ -12,6 +12,7 @@ export default class World
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         this.rayCaster = new THREE.Raycaster()
+        this.players = {}
 
         // Wait for resources
         this.resources.on('ready', () =>
@@ -29,12 +30,33 @@ export default class World
         })
     }
 
+    addPlayer(player) {
+        this.players[player.id] = {
+            id: player.id,
+            name: player.name,
+            position: player.position
+        }
+    }
+
+    removePlayer() {
+        this.players[player.id] = null
+    }
+
+    updatePlayerPosition(playerId, position) {
+        this.players[playerId].position = {
+            x: position.x,
+            y: position.y,
+            z: position.z
+        }
+    }
+
     handleIntersections () {
         if (this.stemObjectGroup) this.stemObjectGroup.handleIntersections(this.rayCaster)
     }
 
     handleClick (event) {
         this.stemObjectGroup.handleClick(event)
+        console.log('players: ', this.players) // TODO: delete
     }
 
     update()

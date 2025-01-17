@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { io } from "socket.io-client"
 
 import Debug from './Utils/Debug.js'
 import Sizes from './Utils/Sizes.js'
@@ -9,6 +8,7 @@ import Renderer from './Renderer.js'
 import World from './World/World.js'
 import Resources from './Utils/Resources.js'
 import YlieFirstPersonControls from './YlieFirstPersonControls.js'
+import SocketMessenger from './SocketMessenger.js'
 
 import sources from './sources.js'
 
@@ -41,6 +41,7 @@ export default class Experience
         this.controls = new YlieFirstPersonControls()
         this.renderer = new Renderer()
         this.world = new World()
+        this.socketMessenger = new SocketMessenger()
 
         // Resize event
         this.sizes.on('resize', () =>
@@ -52,28 +53,6 @@ export default class Experience
         this.time.on('tick', () =>
         {
             this.update()
-        })
-
-        this.initSockets()
-    }
-
-    initSockets() {
-        this.socket = io('https://seal-app-hivs4.ondigitalocean.app')
-        console.log('init socket')
-
-        this.socket.on('connect', () => {
-            console.log('connected_to_server')
-
-            this.emit("client_event", { message: "Hello from the client!" })
-        })
-
-        this.socket.on("server_response", (data) => {
-            console.log("Server says:", data.message)
-        })
-
-        // Listen for disconnection
-        this.socket.on("disconnect", () => {
-            console.log("Disconnected from server")
         })
     }
 
