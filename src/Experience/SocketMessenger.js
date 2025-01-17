@@ -20,6 +20,10 @@ export default class SocketMessenger
             console.log("Disconnected from server")
         })
 
+        this.socket.on('server_response', (data) => {
+            console.log('yaaaay ', data)
+        })
+
         this.socket.on("player_added", (data) => {
             console.log('new player added: ', data)
             this.world.addPlayer(data)
