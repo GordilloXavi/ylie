@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 import WaterFloor from './WaterFloor.js'
+import {Player, PlayerPool} from './PlayerPool.js'
 import StemObjectGroup from './StemObjectGroup.js'
 
 export default class World
@@ -12,7 +13,8 @@ export default class World
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         this.rayCaster = new THREE.Raycaster()
-        this.players = {}
+
+        this.initPlayers()
 
         // Wait for resources
         this.resources.on('ready', () =>
@@ -30,12 +32,36 @@ export default class World
         })
     }
 
-    addPlayer(player) {
-        this.players[player.id] = {
-            id: player.id,
-            name: player.name,
-            position: player.position
+    initPlayers() {
+        this.players = new PlayerPool()
+        const cameraPosition = {
+            x: this.camera.position.x,
+            y: this.camera.position.y,
+            z: this.camera.position.z
         }
+        this.selfPlayer = new Player({
+            name: 'Ylie', 
+            position: cameraPosition,
+            self: true
+        })
+        this.players.add(this.selfPlayer)
+    }
+
+    getSelfPlayer() {
+        return this.selfPlayer
+    }
+
+    addPlayer(player) {
+        const newPlayer = new Player({
+            name: player.name,
+            position: player.position,
+            id: player.client_id,
+            serverId: player.id,
+            self: false
+        })
+        this.players.add(player)
+        //player: {id, client_id, position, name}
+        //this.players[player.client_id] = new Player()
     }
 
     removePlayer() {
@@ -61,6 +87,8 @@ export default class World
 
     update()
     {
+        if (this.players)
+            this.players.update()
         this.rayCaster.setFromCamera(new THREE.Vector2(0, 0), this.camera)
         this.handleIntersections()
         if (this.waterFloor)

@@ -12,7 +12,13 @@ export default class SocketMessenger
 
         this.socket.on('connect', () => {
             console.log('connected_to_server, adding player')
-            this.socket.emit("register_player", { name: 'Xavi' })
+            const selfPlayer = this.world.getSelfPlayer()
+            const playerData = {
+                name: selfPlayer.name,
+                position: selfPlayer.position,
+                id: selfPlayer.id
+            }
+            this.socket.emit("register_player", playerData)
         })
 
         // Listen for disconnection
@@ -27,7 +33,12 @@ export default class SocketMessenger
 
         this.socket.on("player_added", (data) => {
             console.log('new player added: ', data)
-            this.world.addPlayer(data)
+            if (data.client_id == this.selfPlayer.id) {
+                this.selfPlayer.serverId = data.id
+            } else {
+                this.world.addPlayer(data)
+            }
+            
         })
 
         this.listenToPlayerPositionUpdates()
