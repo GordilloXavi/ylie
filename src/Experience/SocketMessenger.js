@@ -27,21 +27,29 @@ export default class SocketMessenger
             console.log("player disconnected: ", data)
         })
 
-        this.socket.on('server_response', (data) => {
-            console.log('yaaaay ', data)
+        this.socket.on('players_info', (data) => {
+            console.log('connected!', data)
+            const playersInfo = data.players
+            for (let i = 0; i < playersInfo.length; i++){
+                if (playersInfo[i].client_id != this.world.getSelfPlayer().id)
+                    this.world.addPlayer(playersInfo[i])
+            }
         })
 
         this.socket.on("player_added", (data) => {
             console.log('new player added: ', data)
-            if (data.client_id == this.selfPlayer.id) {
-                this.selfPlayer.serverId = data.id
+            if (data.client_id == this.world.getSelfPlayer().id) {
+                this.world.getSelfPlayer().serverId = data.id
             } else {
                 this.world.addPlayer(data)
             }
-            
         })
 
         this.listenToPlayerPositionUpdates()
+    }
+
+    addPlayer(data) {
+
     }
 
     listenToPlayerPositionUpdates() {

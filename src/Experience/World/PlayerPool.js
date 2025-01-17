@@ -1,28 +1,62 @@
+import * as THREE from 'three'
+
 import { v4 as uuidv4 } from 'uuid'
+import Experience from '../Experience'
 
 export class Player
 {
     constructor(data)
     {
+        this.experience = new Experience()
         this.name = data.name
         this.position = data.position
         this.id = uuidv4()
         this.serverId = null
         this.isSelf = data.self
 
-        this.renderPlayerModel()
+        if (!this.isSelf) {
+            this.mesh = this.renderPlayerModel()
+            this.experience.scene.add(this.mesh)
+        }
+        this.updatePosition(this.position)
     }
 
     renderPlayerModel() {
-        // TODO: draw a ball or something and later a proper model
+        const geometry = new THREE.SphereGeometry(0.3)
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x333333,
+            }
+        )
+
+        const cube = new THREE.Mesh(geometry, material)
+
+        return cube
     }
 
     delete () {
-        // TODO: dispose geometry etc
+        // TODO: remove from scene, dispose geometry etc
     }
 
-    update() {
+    update () {
 
+    }
+
+    updatePosition(position) {
+        this.position.x = this.position.x
+        this.position.y = this.position.y
+        this.position.z = this.position.z
+
+        if (!this.isSelf && this.mesh) {
+            this.mesh.position.x = this.position.x
+            this.mesh.position.y = 3//this.position.y * 2
+            this.mesh.position.z = this.position.z
+        }
+    }
+
+    updatePosition(position) {
+        this.position.x = position.x
+        this.position.y = position.y
+        this.position.z = position.z
     }
 }
 
