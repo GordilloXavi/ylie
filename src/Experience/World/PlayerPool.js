@@ -10,13 +10,14 @@ export class Player
         this.experience = new Experience()
         this.name = data.name
         this.position = data.position
-        this.id = uuidv4()
-        this.serverId = null
+        this.id = data.id != null ? data.id : uuidv4()
+        this.serverId = data.serverId != null ? data.serverId : null
         this.isSelf = data.self
 
         if (!this.isSelf) {
             this.mesh = this.renderPlayerModel()
             this.experience.scene.add(this.mesh)
+            console.log('rendered player')
         }
         this.updatePosition(this.position)
     }
@@ -34,6 +35,7 @@ export class Player
     }
 
     delete () {
+        console.log('deleting player ', this)
         if (this.mesh) {
             this.experience.scene.remove(this.mesh)
     
@@ -55,15 +57,9 @@ export class Player
 
         if (!this.isSelf && this.mesh) {
             this.mesh.position.x = this.position.x
-            this.mesh.position.y = 5//this.position.y * 2
+            this.mesh.position.y = this.position.y / 2
             this.mesh.position.z = this.position.z
         }
-    }
-
-    updatePosition(position) {
-        this.position.x = position.x
-        this.position.y = position.y
-        this.position.z = position.z
     }
 }
 

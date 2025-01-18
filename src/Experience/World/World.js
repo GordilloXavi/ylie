@@ -59,9 +59,7 @@ export default class World
             serverId: player.id,
             self: false
         })
-        this.players.add(player)
-        //player: {id, client_id, position, name}
-        //this.players[player.client_id] = new Player()
+        this.players.add(newPlayer)
     }
 
     removePlayer(playerId) {

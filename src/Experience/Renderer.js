@@ -63,7 +63,7 @@ export default class Renderer
 
         this.effectComposer.addPass(unrealBloomPass)
         
-        const effectFilm = new FilmPass( 0.4, false )
+        const effectFilm = new FilmPass( 0.1, false )
         this.effectComposer.addPass(effectFilm)
 
         if(this.instance.getPixelRatio() == 1 )
