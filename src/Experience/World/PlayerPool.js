@@ -53,26 +53,24 @@ export class Player
 
             if (oldPosition.x !== this.position.x || oldPosition.y !== this.position.y || oldPosition.z !== this.position.z) {
                 const currentTime = this.experience.time.elapsed
-                if (!this.lastUpdateTime || currentTime - this.lastUpdateTime >= 1000) {
+                if (!this.lastUpdateTime || currentTime - this.lastUpdateTime >= 50) {
                     this.lastUpdateTime = currentTime
                     console.log('sending player position')
                     this.experience.socketMessenger.sendPlayerPositionUpdated(this)
                 }
             }
-        }        
+        } else if (this.mesh) {
+            // interpolate mesh position to object position
+            this.mesh.position.lerp(this.position, 0.1)
+        }    
     }
 
     updatePosition(position) {
         this.position.x = position.x
         this.position.y = position.y
         this.position.z = position.z
-
-        if (!this.isSelf && this.mesh) {
-            this.mesh.position.x = this.position.x
-            this.mesh.position.y = this.position.y / 2
-            this.mesh.position.z = this.position.z
-        }
     }
+    
 }
 
 

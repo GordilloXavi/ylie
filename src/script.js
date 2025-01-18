@@ -2,7 +2,7 @@
 import Experience from './Experience/Experience.js'
 
 // Check for mobile devices
-const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|BlackBerry|Mobile/i.test(navigator.userAgent) || window.matchMedia("(max-width: 768px)").matches
+const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|BlackBerry|Mobile/i.test(navigator.userAgent) //|| window.matchMedia("(max-width: 768px)").matches
 
 if (isMobile) {
     const banner = document.getElementById('mobile-banner')
