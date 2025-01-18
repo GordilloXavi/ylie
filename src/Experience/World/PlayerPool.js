@@ -24,13 +24,13 @@ export class Player
     renderPlayerModel() {
         const geometry = new THREE.SphereGeometry(0.3)
         const material = new THREE.MeshStandardMaterial({
-            color: 0x333333,
+            color: 0xffffff,
             }
         )
 
-        const cube = new THREE.Mesh(geometry, material)
+        const mesh = new THREE.Mesh(geometry, material)
 
-        return cube
+        return mesh
     }
 
     delete () {
@@ -48,7 +48,7 @@ export class Player
 
         if (!this.isSelf && this.mesh) {
             this.mesh.position.x = this.position.x
-            this.mesh.position.y = 3//this.position.y * 2
+            this.mesh.position.y = 5//this.position.y * 2
             this.mesh.position.z = this.position.z
         }
     }
