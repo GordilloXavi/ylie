@@ -49,21 +49,20 @@ export default class SocketMessenger
         this.listenToPlayerPositionUpdates()
     }
 
-    addPlayer(data) {
-
-    }
-
     listenToPlayerPositionUpdates() {
         this.socket.on('player_position_updated', (data) => {
-            const playerId = data.player_id
-            const playerPosition = data.player_position
-            this.world.updatePlayerPosition(playerId, playerPosition)
+            console.log('player_position_updated: ', data)
+            const player = this.world.getPlayer(data.client_id)
+            if (player) {
+                player.updatePosition(data.position)
+            }
         })
     }
 
     sendPlayerPositionUpdated(player) {
+        console.log('sending player position: ', player)
         this.socket.emit('update_player_position', {
-            playerId: player.id,
+            playerId: player.serverId,
             position: player.position
         })
     }

@@ -51,6 +51,10 @@ export default class World
         return this.selfPlayer
     }
 
+    getPlayer(playerId) {
+        return this.players.get(playerId)
+    }
+
     addPlayer(player) {
         const newPlayer = new Player({
             name: player.name,

@@ -171,17 +171,16 @@ export default class YlieFirstPersonControls
                     //footsteps.currentIndex = (footsteps.currentIndex + 1) % footsteps.audios.length
                 }
             }
-            this.experience.camera.instance.position.y = this.initialCameraHeight + footstepHeight
+            this.camera.position.y = this.initialCameraHeight + footstepHeight
         } else {
             const footstepHeight = Math.sin(-Math.PI/2 + this.movementCounter * currentMovementSpeed / this.footstepFreq) / this.footstepAmplitude + 1 / this.footstepAmplitude
             if (footstepHeight > 0.0005) {
-                this.experience.camera.instance.position.y = this.initialCameraHeight + footstepHeight
+                this.camera.position.y = this.initialCameraHeight + footstepHeight
                 this.movementCounter += this.experience.time.delta
             } else {
                 this.movementCounter = 0
-                this.experience.camera.instance.position.y = this.initialCameraHeight
+                this.camera.position.y = this.initialCameraHeight
             }
         }
-        
     }
 }

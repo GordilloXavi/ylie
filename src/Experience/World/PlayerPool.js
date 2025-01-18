@@ -47,13 +47,25 @@ export class Player
     }
 
     update () {
+        if (this.isSelf) {
+            const oldPosition = new THREE.Vector3().copy(this.position)
+            this.updatePosition(this.experience.camera.instance.position)
 
+            if (oldPosition.x !== this.position.x || oldPosition.y !== this.position.y || oldPosition.z !== this.position.z) {
+                const currentTime = this.experience.time.elapsed
+                if (!this.lastUpdateTime || currentTime - this.lastUpdateTime >= 1000) {
+                    this.lastUpdateTime = currentTime
+                    console.log('sending player position')
+                    this.experience.socketMessenger.sendPlayerPositionUpdated(this)
+                }
+            }
+        }        
     }
 
     updatePosition(position) {
-        this.position.x = this.position.x
-        this.position.y = this.position.y
-        this.position.z = this.position.z
+        this.position.x = position.x
+        this.position.y = position.y
+        this.position.z = position.z
 
         if (!this.isSelf && this.mesh) {
             this.mesh.position.x = this.position.x
@@ -90,7 +102,13 @@ export class PlayerPool
         }
     }
 
-    update() {
+    getAllPlayers() {
+        return Object.values(this.players)
+    }
 
+    update() {
+        for (const player of this.getAllPlayers()) {
+            player.update()
+        }
     }
 }
