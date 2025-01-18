@@ -34,7 +34,14 @@ export class Player
     }
 
     delete () {
-        // TODO: remove from scene, dispose geometry etc
+        if (this.mesh) {
+            this.experience.scene.remove(this.mesh)
+    
+            if (this.mesh.geometry) this.mesh.geometry.dispose()
+            if (this.mesh.material) this.mesh.material.dispose()
+    
+            this.mesh = null
+        }
     }
 
     update () {
@@ -71,9 +78,20 @@ export class PlayerPool
         this.players[player.id] = player
     }
 
+    get(playerId) {
+        return this.players[playerId]
+    }
+
     delete(playerId) {
-        this.players[playerId].delete()
-        this.players[playerId] = null
+        const player = this.get(playerId)
+
+        if (player) {
+            player.delete()
+
+            delete this.players[playerId]
+        } else {
+            console.warn(`Player with ID ${playerId} not found.`)
+        }
     }
 
     update() {

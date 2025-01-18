@@ -64,8 +64,8 @@ export default class World
         //this.players[player.client_id] = new Player()
     }
 
-    removePlayer() {
-        this.players[player.id] = null
+    removePlayer(playerId) {
+        this.players.delete(playerId)
     }
 
     updatePlayerPosition(playerId, position) {

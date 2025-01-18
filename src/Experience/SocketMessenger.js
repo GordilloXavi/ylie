@@ -25,6 +25,7 @@ export default class SocketMessenger
         this.socket.on("player_disconnected", (data) => {
             // remove disconnected player
             console.log("player disconnected: ", data)
+            this.world.removePlayer(data.client_id)
         })
 
         this.socket.on('players_info', (data) => {
