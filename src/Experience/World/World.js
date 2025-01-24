@@ -84,7 +84,6 @@ export default class World
 
     handleClick (event) {
         this.stemObjectGroup.handleClick(event)
-        console.log('players: ', this.players) // TODO: delete
     }
 
     update()

@@ -38,12 +38,11 @@ export class Player
     addNameLabel(mesh) {
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
-        const size = 256
-        const distance = mesh.position.distanceTo(this.experience.camera.instance.position)
-        const textSize = 256//Math.round(size / distance)
+        const textSize = 256
         canvas.width = textSize
         canvas.height = textSize
-        ctx.fillStyle = '#ffffff'
+        ctx.fillStyle = '#000000'
+        ctx.lineWidth = .5 // Adjust outline width as needed
         ctx.textAlign = 'center'
         ctx.font = `24px "Courier New", monospace`;
         const text = '<' + this.name + '>'
@@ -86,7 +85,7 @@ export class Player
                 if (!this.lastUpdateTime || currentTime - this.lastUpdateTime >= 50) {
                     this.lastUpdateTime = currentTime
                     console.log('sending player position')
-                    this.experience.socketMessenger.sendPlayerPositionUpdated(this)
+                    if (this.experience.socketMessenger) this.experience.socketMessenger.sendPlayerPositionUpdated(this)
                 }
             }
         } else if (this.mesh) {
@@ -96,7 +95,7 @@ export class Player
             if (this.nameLabel) {
                 this.nameLabel.lookAt(this.experience.camera.instance.position)
                 const distanceToCamera = this.mesh.position.distanceTo(this.experience.camera.instance.position)
-                const textSize = distanceToCamera / 10
+                const textSize = Math.max(distanceToCamera / 10, 0.5)
                 this.nameLabel.scale.set(textSize, textSize, 1)
             }
         }    

@@ -4,6 +4,7 @@ import Debug from './Utils/Debug.js'
 import Sizes from './Utils/Sizes.js'
 import Time from './Utils/Time.js'
 import Camera from './Camera.js'
+import GameState from './GameState.js'
 import Renderer from './Renderer.js'
 import World from './World/World.js'
 import Resources from './Utils/Resources.js'
@@ -16,7 +17,7 @@ let instance = null
 
 export default class Experience
 {
-    constructor(_canvas)
+    constructor(_canvas, isMobile)
     {
         // Singleton
         if(instance)
@@ -30,6 +31,10 @@ export default class Experience
 
         // Options
         this.canvas = _canvas
+        this.isMobile = isMobile
+        this.state = GameState.LOBBY
+
+        this.setupNameOverlay()
 
         // Setup
         this.debug = new Debug()
@@ -41,7 +46,7 @@ export default class Experience
         this.controls = new YlieFirstPersonControls()
         this.renderer = new Renderer()
         this.world = new World()
-        this.socketMessenger = new SocketMessenger()
+        this.socketMessenger = null//new SocketMessenger()
 
         // Resize event
         this.sizes.on('resize', () =>
@@ -53,6 +58,32 @@ export default class Experience
         this.time.on('tick', () =>
         {
             this.update()
+        })
+    }
+
+    setupNameOverlay() {
+        const nameOverlay = document.getElementById('nameOverlay')
+        const nameForm = document.getElementById('nameForm')
+        const nameInput = document.getElementById('nameInput')
+        const canvas = document.getElementById('threeCanvas')
+
+        window.addEventListener('load', () => {
+            nameInput.focus()
+        })
+
+        // Form Submission
+        nameForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            this.playerName = nameInput.value.trim()
+            if (this.playerName.length > 0) {
+                this.controls.lock()
+                nameOverlay.style.display = 'none'
+                canvas.style.display = 'block'
+                this.state = GameState.PLAYING
+                this.world.selfPlayer.name = this.playerName
+                this.socketMessenger = new SocketMessenger()
+                this.world.stemObjectGroup.playAllSounds()
+            }
         })
     }
 

@@ -2,6 +2,7 @@ import * as THREE from 'three'
 
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js'
 import Experience from './Experience'
+import GameState from './GameState.js'
 
 
 export default class YlieFirstPersonControls 
@@ -38,6 +39,11 @@ export default class YlieFirstPersonControls
         document.addEventListener( 'click', this.handleClick)
     }
 
+    lock() {
+        this.controls.lock()
+        this.enterFullscreen()
+    }
+
     isFullScreen () {
         return document.fullscreenElement
     }
@@ -53,8 +59,7 @@ export default class YlieFirstPersonControls
     handleKeyPress = (event) => {
         if (event.code == 'KeyF') {
             if (!this.isFullScreen()) {
-                this.controls.lock()
-                this.enterFullscreen()
+                this.lock()
             } else {
                 this.exitFullScreen()
             }
@@ -64,10 +69,9 @@ export default class YlieFirstPersonControls
     }
 
     handleClick = (event) => {
-        this.controls.lock()
-        this.enterFullscreen()
-        this.experience.world.stemObjectGroup.playAllSounds()
-
+        if (this.experience.state == GameState.PLAYING && !this.isFullScreen()) {    
+            this.lock()
+        }
         this.experience.world.handleClick(event)
     }
 
