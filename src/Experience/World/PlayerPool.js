@@ -30,8 +30,38 @@ export class Player
         )
 
         const mesh = new THREE.Mesh(geometry, material)
+        this.addNameLabel(mesh)
 
         return mesh
+    }
+
+    addNameLabel(mesh) {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        const size = 256
+        const distance = mesh.position.distanceTo(this.experience.camera.instance.position)
+        const textSize = 256//Math.round(size / distance)
+        canvas.width = textSize
+        canvas.height = textSize
+        ctx.fillStyle = '#ffffff'
+        ctx.textAlign = 'center'
+        ctx.font = `24px "Courier New", monospace`;
+        const text = '<' + this.name + '>'
+        ctx.fillText(text, textSize / 2, textSize / 2)
+
+        const texture = new THREE.CanvasTexture(canvas)
+        texture.minFilter = THREE.LinearFilter
+
+        const geometry = new THREE.PlaneGeometry(1, 1)
+        const material = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            side: THREE.DoubleSide
+        })
+
+        this.nameLabel = new THREE.Mesh(geometry, material)
+        this.nameLabel.position.set(0, 0.5, 0)
+        mesh.add(this.nameLabel)
     }
 
     delete () {
@@ -62,6 +92,13 @@ export class Player
         } else if (this.mesh) {
             // interpolate mesh position to object position
             this.mesh.position.lerp(this.position, 0.1)
+
+            if (this.nameLabel) {
+                this.nameLabel.lookAt(this.experience.camera.instance.position)
+                const distanceToCamera = this.mesh.position.distanceTo(this.experience.camera.instance.position)
+                const textSize = distanceToCamera / 10
+                this.nameLabel.scale.set(textSize, textSize, 1)
+            }
         }    
     }
 
