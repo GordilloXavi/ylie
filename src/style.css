@@ -30,16 +30,21 @@ body
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    font-family: monospace;
 }
+
 #nameForm {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 label, input, button {
     font-size: 20px;
     margin: 10px;
+    font-family: monospace;
 }
+
 #threeCanvas {
     display: none;
 }
