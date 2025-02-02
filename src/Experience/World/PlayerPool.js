@@ -154,7 +154,7 @@ export class Player
                 this.nameLabel.scale.set(textSize, textSize, 1)
             }
             if (this.animationMixer) {
-                this.animationMixer.update(this.experience.time.delta)
+                this.animationMixer.update(this.experience.time.delta / 2)
             }
         }    
     }

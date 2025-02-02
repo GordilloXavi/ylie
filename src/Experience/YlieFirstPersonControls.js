@@ -37,6 +37,7 @@ export default class YlieFirstPersonControls
         document.addEventListener( 'keyup', this.handleKeyUp )
         document.addEventListener( 'keypress', this.handleKeyPress)
         document.addEventListener( 'click', this.handleClick)
+        document.addEventListener( 'mousemove' , this.handleCamaraRotated);
     }
 
     lock() {
@@ -131,6 +132,13 @@ export default class YlieFirstPersonControls
             case 'ShiftLeft':
                 this.sprinting = false
                 break
+        }
+    }
+
+    handleCamaraRotated = (event) => {
+        if (this.controls.isLocked) {
+            // emit player moved with camera.lookat
+            console.log('camera rotated: ', this.camera.rotation)
         }
     }
 
