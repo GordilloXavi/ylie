@@ -27,5 +27,30 @@ export default [
         name: 'skyEnvMap',
         type: 'envMap',
         path: 'env_maps/sunset.hdr'
+    },
+    {
+        name: 'femaleCharacterModel',
+        type: 'FBXmodel',
+        path: 'models/female_goth/model.fbx'
+    },
+    {
+        name: 'femaleCharacterColorTexture',
+        type: 'texture',
+        path: 'models/female_goth/textures/color.png'
+    },
+    {
+        name: 'femaleCharacterNormalTexture',
+        type: 'texture',
+        path: 'models/female_goth/textures/normal.png'
+    },
+    {
+        name: 'femaleCharacterRoughnessMetalnessTexture',
+        type: 'texture',
+        path: 'models/female_goth/textures/roughness_metalness.png'
+    },
+    {
+        name: 'femaleCharacterIdleAnimation',
+        type: 'FBXanimation',
+        path: 'models/female_goth/animations/idle.fbx'
     }
 ]

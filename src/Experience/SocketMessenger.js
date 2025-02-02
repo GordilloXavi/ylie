@@ -60,7 +60,7 @@ export default class SocketMessenger
     }
 
     sendPlayerPositionUpdated(player) {
-        console.log('sending player position: ', player)
+        //console.log('sending player position: ', player)
         this.socket.emit('update_player_position', {
             playerId: player.serverId,
             position: player.position

@@ -1,7 +1,8 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
+import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import EventEmitter from './EventEmitter.js'
 
 export default class Resources extends EventEmitter
@@ -20,6 +21,10 @@ export default class Resources extends EventEmitter
         this.startLoading()
     }
 
+    allLoaded() {
+        return this.loaded == this.toLoad
+    }
+
     setLoaders()
     {
         this.loaders = {}
@@ -28,6 +33,7 @@ export default class Resources extends EventEmitter
         this.loaders.audioLoader = new THREE.AudioLoader()
         this.loaders.exrLoader = new EXRLoader()
         this.loaders.hdrLoader = new RGBELoader()
+        this.loaders.fbxLoader = new FBXLoader()
     }
 
     startLoading()
@@ -41,6 +47,14 @@ export default class Resources extends EventEmitter
                     source.path,
                     (file) =>
                     {
+                        this.sourceLoaded(source, file)
+                    }
+                )
+            }
+            else if (source.type === 'FBXmodel' || source.type === 'FBXanimation') {
+                this.loaders.fbxLoader.load(
+                    source.path,
+                    (file) => {
                         this.sourceLoaded(source, file)
                     }
                 )

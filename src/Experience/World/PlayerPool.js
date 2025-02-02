@@ -8,31 +8,86 @@ export class Player
     constructor(data)
     {
         this.experience = new Experience()
+        this.resources = this.experience.resources
         this.name = data.name
         this.position = data.position
         this.id = data.id != null ? data.id : uuidv4()
         this.serverId = data.serverId != null ? data.serverId : null
         this.isSelf = data.self
+        this.renderedModel = false
+        this.animationMixer = null
 
         if (!this.isSelf) {
-            this.mesh = this.renderPlayerModel()
-            this.experience.scene.add(this.mesh)
+            this.renderPlayerModel()
             console.log('rendered player')
         }
         this.updatePosition(this.position)
     }
 
     renderPlayerModel() {
+        if (this.isSelf || this.renderedModel) return
+
+        if (this.experience.resources.allLoaded()) {
+            this.destroyDefaultModel()
+            this.renderCharacterModel()
+        } else {
+            this.renderDefaultModel()
+        }
+    }
+
+    renderCharacterModel() {
+        console.log('rendering character model')
+
+        const femaleCharacterModel = this.resources.items.femaleCharacterModel
+        const femaleCharacterColorTexture = this.resources.items.femaleCharacterColorTexture
+        const femaleCharacterNormalTexture = this.resources.items.femaleCharacterNormalTexture
+        const femaleCharacterRoughnessMetalnessTexture = this.resources.items.femaleCharacterRoughnessMetalnessTexture
+
+        femaleCharacterModel.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshStandardMaterial({
+                    map: femaleCharacterColorTexture,
+                    normalMap: femaleCharacterNormalTexture,
+                    roughnessMap: femaleCharacterRoughnessMetalnessTexture,
+                    metalnessMap: femaleCharacterRoughnessMetalnessTexture
+                })
+            }
+        })
+        femaleCharacterModel.scale.set(0.004, 0.004, 0.004)
+        this.mesh = femaleCharacterModel
+        this.addNameLabel(this.mesh)
+
+        this.experience.scene.add(this.mesh)
+
+        if (!this.animationMixer) {
+            this.animationMixer = new THREE.AnimationMixer(this.mesh)
+            console.log(this.mesh.animations)
+            const action = this.animationMixer.clipAction(this.resources.items.femaleCharacterIdleAnimation.animations[0])
+            action.play()
+        }
+    }
+
+    renderDefaultModel() {
+        console.log('rendering default model')
         const geometry = new THREE.SphereGeometry(0.3)
         const material = new THREE.MeshStandardMaterial({
             color: 0xffffff,
             }
         )
 
-        const mesh = new THREE.Mesh(geometry, material)
-        this.addNameLabel(mesh)
+        this.mesh = new THREE.Mesh(geometry, material)
+        this.addNameLabel(this.mesh)
 
-        return mesh
+        this.experience.scene.add(this.mesh)
+    }
+
+    destroyDefaultModel() {
+        if (this.mesh) {
+            this.experience.scene.remove(this.mesh)
+            this.mesh.geometry.dispose()
+            this.mesh.material.dispose()
+            this.mesh = null
+        }
     }
 
     addNameLabel(mesh) {
@@ -98,12 +153,15 @@ export class Player
                 const textSize = Math.max(distanceToCamera / 10, 0.5)
                 this.nameLabel.scale.set(textSize, textSize, 1)
             }
+            if (this.animationMixer) {
+                this.animationMixer.update(this.experience.time.delta)
+            }
         }    
     }
 
     updatePosition(position) {
         this.position.x = position.x
-        this.position.y = position.y
+        this.position.y = 0//position.y
         this.position.z = position.z
     }
     
@@ -114,6 +172,12 @@ export class PlayerPool
 {
     constructor() {
         this.players = {}
+        this.experience = new Experience()
+        this.resources = this.experience.resources
+
+        this.resources.on('ready', () => {
+            this.renderModels()
+        })
     }
 
     add(player) {
@@ -138,6 +202,13 @@ export class PlayerPool
 
     getAllPlayers() {
         return Object.values(this.players)
+    }
+
+    renderModels() {
+        console.log('rendering models')
+        for (const player of this.getAllPlayers()) {
+            player.renderPlayerModel()
+        }
     }
 
     update() {
